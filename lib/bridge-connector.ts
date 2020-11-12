@@ -4,11 +4,14 @@ import * as unicast from 'unicast';
 import {Writable} from 'stream';
 import {MessageResponse} from './messages/abstract/message-response';
 import {MessageRequest} from './messages/abstract/message-request';
+import * as aesjs from 'aes-js';
 
 export class BridgeConnector {
 
     private socket: any;
     private messagePipeline: {[msgId: string]: (message: any) => void} = {};
+    private token: string;
+    private accessToken: string;
 
     constructor(
         private readonly config: SiroWifiConfig
@@ -76,6 +79,21 @@ export class BridgeConnector {
             this.messagePipeline[message.msgType](message);
             delete this.messagePipeline[message.msgType];
         }
+    }
+
+    public setToken(token: string): void {
+        this.token = token;
+
+        // calculate access token
+        const key = this.config.bridgeKey.split('').map((char) => char.charCodeAt(0));
+        const textBytes = aesjs.utils.utf8.toBytes(this.token);
+        const aesEcb = new aesjs.ModeOfOperation.ecb(key);
+        const encryptedBytes = aesEcb.encrypt(textBytes);
+        this.accessToken = aesjs.utils.hex.fromBytes(encryptedBytes);
+    }
+
+    public getAccessToken(): string {
+        return this.accessToken;
     }
 
 }
