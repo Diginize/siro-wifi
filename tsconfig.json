@@ -10,7 +10,9 @@
   },
   "include": [
     "index.ts",
-    "lib/**/*"
+    "lib/**/*",
+    "typings/*",
+    "typings/**/*"
   ],
   "exclude": [
     "node_modules",
