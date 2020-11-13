@@ -43,8 +43,10 @@ export class BridgeConnector {
         this.socket.close();
     }
 
-    public sendMessage<T extends MessageRequest, R extends MessageResponse<any>>(message: T, expectedReturnType: string, timeout: number = 10): Promise<R> {
+    public sendMessage<T extends MessageRequest, R extends MessageResponse<any>>(message: T, timeout: number = 10): Promise<R> {
         return new Promise<R>(((resolve, reject) => {
+            const expectedReturnType = message.msgType + 'Ack';
+
             let messageResolved = false;
             let timedOut = false;
 
