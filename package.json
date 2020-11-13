@@ -1,7 +1,8 @@
 {
-  "name": "@diginize/siro-wifi",
+  "name": "siro-wifi",
   "version": "0.0.1",
   "description": "Library to communicate with Siro bridge",
+  "keywords": ["smarthome", "siro"],
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -fr dist; tsc",

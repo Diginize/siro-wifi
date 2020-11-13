@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
+    "declarationMap": true,
     "module": "commonjs",
     "noImplicitAny": true,
     "outDir": "dist",
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": true,
-    "target": "ES2019"
+    "target": "ES2019",
+    "typeRoots": [
+      "node_modules/@types",
+      "typings"
+    ]
   },
   "include": [
     "index.ts",
     "lib/**/*",
-    "typings/*",
     "typings/**/*"
   ],
   "exclude": [
