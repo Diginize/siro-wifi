@@ -31,7 +31,9 @@ export class BridgeConnector {
             remotePort: this.config.bridgePort,
             remoteAddress: this.config.bridgeIp
         });
+    }
 
+    private setupMessageReader(): void {
         const converter = new Writable();
         converter._write = (data: Buffer) => this.messageReader(data);
         this.socket.pipe(converter);
@@ -54,6 +56,8 @@ export class BridgeConnector {
                 messageResolved = true;
                 resolve(message);
             };
+
+            this.setupMessageReader();
 
             const writeSuccess = this.socket.write(JSON.stringify(message));
             if (!writeSuccess) {
@@ -84,7 +88,7 @@ export class BridgeConnector {
     public setToken(token: string): void {
         this.token = token;
         const accessTokenB64 = aes.encrypt(this.config.bridgeKey, this.token);
-        this.accessToken = Buffer.from(accessTokenB64, 'base64').toString('hex').toUpperCase();
+        this.accessToken = Buffer.from(accessTokenB64, 'base64').toString('hex').substr(0, 32).toUpperCase();
     }
 
     public getAccessToken(): string {
