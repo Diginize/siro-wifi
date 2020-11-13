@@ -1,6 +1,6 @@
 import {MessageResponse} from './abstract/message-response';
 import {DeviceStatus} from './abstract/device-status';
 
-export interface WriteDevice extends MessageResponse<DeviceStatus> {
+export interface WriteDeviceAck extends MessageResponse<DeviceStatus> {
     msgType: 'WriteDeviceAck';
 }

@@ -6,12 +6,12 @@ import {WirelessModes} from '../../enum/wireless-modes';
 
 export interface DeviceStatus {
     type: Devices;
-    operation: Operations;
-    currentPosition: number;
-    currentAngle: number;
-    currentState: CurrentState;
-    voltageMode: VoltageModes;
-    batteryLevel: number;
-    wirelessMode: WirelessModes;
-    RSSI: number;
+    operation?: Operations;
+    currentPosition?: number;
+    currentAngle?: number;
+    currentState?: CurrentState;
+    voltageMode?: VoltageModes;
+    batteryLevel?: number;
+    wirelessMode?: WirelessModes;
+    RSSI?: number;
 }
