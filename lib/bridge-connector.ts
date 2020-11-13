@@ -4,7 +4,7 @@ import * as unicast from 'unicast';
 import {Writable} from 'stream';
 import {MessageResponse} from './messages/abstract/message-response';
 import {MessageRequest} from './messages/abstract/message-request';
-import * as aesjs from 'aes-js';
+const aes = require('aes-ecb');
 
 export class BridgeConnector {
 
@@ -41,7 +41,7 @@ export class BridgeConnector {
         this.socket.close();
     }
 
-    public sendMessage<T extends MessageRequest, D, R extends MessageResponse<D>>(message: T, expectedReturnType: string = message.msgId, timeout: number = 10): Promise<R> {
+    public sendMessage<T extends MessageRequest, R extends MessageResponse<any>>(message: T, expectedReturnType: string, timeout: number = 10): Promise<R> {
         return new Promise<R>(((resolve, reject) => {
             let messageResolved = false;
             let timedOut = false;
@@ -83,13 +83,8 @@ export class BridgeConnector {
 
     public setToken(token: string): void {
         this.token = token;
-
-        // calculate access token
-        const key = this.config.bridgeKey.split('').map((char) => char.charCodeAt(0));
-        const textBytes = aesjs.utils.utf8.toBytes(this.token);
-        const aesEcb = new aesjs.ModeOfOperation.ecb(key);
-        const encryptedBytes = aesEcb.encrypt(textBytes);
-        this.accessToken = aesjs.utils.hex.fromBytes(encryptedBytes);
+        const accessTokenB64 = aes.encrypt(this.config.bridgeKey, this.token);
+        this.accessToken = Buffer.from(accessTokenB64, 'base64').toString('hex').toUpperCase();
     }
 
     public getAccessToken(): string {
